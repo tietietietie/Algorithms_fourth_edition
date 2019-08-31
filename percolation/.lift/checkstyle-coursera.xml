@@ -3,6 +3,8 @@
   "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
   "https://checkstyle.org/dtds/configuration_1_3.dtd">
 
+    <!-- TODO: StdRandom.uniform(1): always returns 0. Did you mean StdRandom.uniform(0.0, 1.0)?  -->
+
 <module name="Checker">
     <!-- directory where the .java file lives -->
     <!-- the property "basedir" should be passed as a -D command-line option to Java -->
@@ -105,257 +107,6 @@
         <message key = "regexp.filename.match" value="Do not submit a file whose name ends in ''226''; that suffix is reserved by the autograder."/>
     </module>
 
-    <!-- =========================================================================== -->
-    <!-- BEGIN: PRINCETON COS 226 SPECIFIC CHECKS (mostly for header)                -->
-    <!-- =========================================================================== -->
-
-    <!-- should we change this to allow Unicode, e.g., for student's names? -->
-    <!-- dropbox.cs now supports Unicode, but codePost doesn't              -->
-    <module name="RegexpSingleline">
-        <property name="id" value="NotASCII"/>
-        <property name="fileExtensions" value ="java, txt, toy"/>
-        <property name="format" value="[^\x00-\x7F]"/>
-        <property name="message" value="Line contains a non-ASCII character."/>
-    </module>
-
-    <module name="RegexpOnFilename">
-        <property name="id" value="LongFileName"/>
-        <property name="severity" value="error"/>
-        <property name="fileNamePattern" value="^.{33,}$"/>
-        <property name="match" value="true"/>
-        <message key = "regexp.filename.match" value="The filename must not be longer than 32 characters (or codePost will reject it)."/>
-    </module>
-
-    <!-- header for .java and .toy files -->
-    <module name="RegexpMultiline">
-        <property name="id" value="Header"/>
-        <property name="severity" value="error"/>
-        <property name="fileExtensions" value="java, toy"/>
-        <property name="format" 
-                  value="\A[\uFEFF\uFFEF]? *\/\* *\*{70,} *(\n|\r|\r\n) *\* *Name:.*(\n|\r|\r\n) *\* *NetID:.*(\n|\r|\r\n) *\* *Precept:.*(\n|\r|\r\n)( *\* *(\n|\r|\r\n))*( *\* *Partner Name:.*(\n|\r|\r\n) *\* *Partner NetID:.*(\n|\r|\r\n) *\* *Partner Precept:.*(\n|\r|\r\n) *\* *(\n|\r|\r\n))? *\* *Description:.*(\n|\r|\r\n)( *\*.*(\n|\r|\r\n))* *\*{70,} *\*\/ *(\n|\r|\r\n)"/>
-        <!-- for exactly match
-                  value="\A\/\*{78}(\n|\r|\r\n) \*  ?Name:.*(\n|\r|\r\n) \*  ?NetID:.*(\n|\r|\r\n) \*  ?Precept:.*(\n|\r|\r\n) \*\s*(\n|\r|\r\n)( \*  ?Partner Name:.*(\n|\r|\r\n) \*  ?Partner NetID:.*(\n|\r|\r\n) \*  ?Partner Precept:.*(\n|\r|\r\n) \*\s*(\n|\r|\r\n))? \*  ?Description:.*(\n|\r|\r\n)( \*.*(\n|\r|\r\n))* \*{78}/(\n|\r|\r\n)"/>
-        -->
-        <property name="message" value="Incorrect COS 226 header format. Please cut and paste from the header template in the Assignment FAQ."/>
-        <property name="minimum" value="1"/>
-        <property name="maximum" value="1"/>
-        <property name="ignoreCase" value="false"/>
-    </module>
-
-    <!-- header for readme.txt -->
-    <module name="RegexpMultiline">
-        <property name="id" value="Header"/>
-        <property name="severity" value="error"/>
-        <property name="fileExtensions" value="txt"/>
-        <property name="format" 
-                  value="\A[\uFEFF\uFFEF]? *\/\* *\*{70,} *(\n|\r|\r\n) *\* *Name:.*(\n|\r|\r\n) *\* *NetID:.*(\n|\r|\r\n) *\* *Precept:.*(\n|\r|\r\n)( *\* *(\n|\r|\r\n))*( *\* *Partner Name:.*(\n|\r|\r\n) *\* *Partner NetID:.*(\n|\r|\r\n) *\* *Partner Precept:.*(\n|\r|\r\n) *\* *(\n|\r|\r\n))?( *\*.*(\n|\r|\r\n))* *\*{70,} *\*\/ *(\n|\r|\r\n)"/>
-        <!-- for exact match
-                  value="\A\/\*{78}(\n|\r|\r\n) \*  ?Name:.*(\n|\r|\r\n) \*  ?NetID:.*(\n|\r|\r\n) \*  ?Precept:.*(\n|\r|\r\n)( \*\s*(\n|\r|\r\n))*( \*  ?Partner Name:.*(\n|\r|\r\n) \*  ?Partner NetID:.*(\n|\r|\r\n) \*  ?Partner Precept:.*(\n|\r|\r\n) \*\s*(\n|\r|\r\n))?( \*.*(\n|\r|\r\n))* \*{78}/(\n|\r|\r\n)"/>
-        -->
-        <property name="message" value="Incorrect COS 226 header format. Please cut and paste from the header template in the Assignment FAQ."/>
-        <property name="minimum" value="1"/>
-        <property name="maximum" value="1"/>
-        <property name="ignoreCase" value="false"/>
-    </module>
-
-    <module name="RegexpMultiline">
-        <property name="id" value="Header"/>
-        <property name="fileExtensions" value="java, toy"/>
-        <property name="format"
-                  value="^ *\* *(Partner|Partner Precept):.*(\n|\r|\r\n) *\* *Description:"/>
-        <property name="message" value="There must be one line in the header between the Name/NetID/Precept information and the Description."/>
-        <property name="minimum" value="0"/>
-        <property name="maximum" value="0"/>
-        <property name="ignoreCase" value="false"/>
-    </module>
-
-    <!-- a helpful warning for students that copy the header the introcs booksite code -->
-    <module name="RegexpMultiline">
-        <property name="id" value="Header"/>
-        <property name="fileExtensions" value="java"/>
-        <property name="format"
-                  value="^ *\* *(Partner|Partner Precept):.*(\n|\r|\r\n)( *\* *(\n|\r|\r\n))* *\* *(Compilation:|Execution:Dependencies:)"/>
-        <property name="message" value="If you include ''Compilation'', ''Execution'', and ''Dependencies'' comments in the header, they must appear after the ''Description'' comment."/>
-        <property name="minimum" value="0"/>
-        <property name="maximum" value="0"/>
-        <property name="ignoreCase" value="false"/>
-    </module>
-
-    <!-- check that the first non-whitespace character in each line of the header is an asterisk -->
-    <!-- (except for the first line, which begins with /*) -->
-    <module name="RegexpMultiline">
-        <property name="id" value="Header"/>
-        <property name="fileExtensions" value="txt, java, toy"/>
-        <property name="format" 
-                  value="\A[\uFEFF\uFFEF]?\s*\/\*{1,}.*(\n|\r|\r\n)( *\*.*(\n|\r|\r\n))+ *\*{1,}.*\*/ *(\n|\r|\r\n)"/>
-        <property name="message" value="The second character of each line in the header must be an asterisk (''*'')."/>
-        <property name="minimum" value="1"/>
-        <property name="maximum" value="1"/>
-    </module>
-
-    <module name="RegexpHeader">
-        <property name="id" value="Header"/>
-        <property name="fileExtensions" value="txt, java, toy"/>
-        <property name="header" value="\/\* *\*{70,}\s*$"/>
-        <message key="header.mismatch" value="The header must begin on line 1 and the first line of the header must start with the slash character (''/'') and be followed by 78 asterisks (''*'')."/>
-        <message key="header.missing"  value="The header must begin on line 1 and the first line of the header must start with the slash character (''/'') and be followed by 78 asterisks (''*'')."/>
-    </module>
-
-    <!-- Checks for Name, NetID, and Precept -->
-    <module name="RegexpSingleline">
-        <property name="id" value="Header"/>
-        <property name="severity" value="error"/>
-        <property name="fileExtensions" value ="txt, java, toy"/>
-        <property name="format" value="Name:\s+\S"/>
-        <property name="ignoreCase" value="false"/>
-        <property name="minimum" value="1"/>
-        <property name="maximum" value="999"/>
-        <property name="message" value="Invalid, empty, or missing ''Name'' in header."/>
-    </module>
-
-    <module name="RegexpSingleline">
-        <property name="id" value="Header"/>
-        <property name="severity" value="error"/>
-        <property name="fileExtensions" value ="txt, java, toy"/>
-        <property name="format" value="NetID:\s+[a-zA-Z0-9@.]{2,30}\s*$"/>
-        <property name="ignoreCase" value="false"/>
-        <property name="minimum" value="1"/>
-        <property name="maximum" value="999"/>
-        <property name="message" value="Invalid, empty, or missing ''NetID'' in header."/>
-    </module>
-
-    <!-- Forgot to change Name or Partner Name? -->
-    <module name="RegexpSingleline">
-        <property name="severity" value="error"/>
-        <property name="id" value="Header"/>
-        <property name="fileExtensions" value ="txt, java, toy"/>
-        <property name="format" value="Name:\s+Alan\s+Turing"/>
-        <property name="ignoreCase" value="true"/>
-        <property name="minimum" value="0"/>
-        <property name="maximum" value="0"/>
-        <property name="message" value="Are you sure that your name (or partner''s name) is ''Alan Turing''?"/>
-    </module>
-
-    <!-- Forgot to change NetID or Partner NetID? -->
-    <module name="RegexpSingleline">
-        <property name="severity" value="error"/>
-        <property name="id" value="Header"/>
-        <property name="fileExtensions" value ="txt, java, toy"/>
-        <property name="format" value="NetID:\s+aturing\s*$"/>
-        <property name="ignoreCase" value="true"/>
-        <property name="minimum" value="0"/>
-        <property name="maximum" value="0"/>
-        <property name="message" value="Are you sure that your NetID (or partner''s NetID) is ''aturing''?"/>
-    </module>
-
-    <!-- Forgot to change Name or Partner Name? -->
-    <module name="RegexpSingleline">
-        <property name="severity" value="error"/>
-        <property name="id" value="Header"/>
-        <property name="fileExtensions" value ="txt, java, toy"/>
-        <property name="format" value="Name:\s+Ada\s+Lovelace"/>
-        <property name="ignoreCase" value="true"/>
-        <property name="minimum" value="0"/>
-        <property name="maximum" value="0"/>
-        <property name="message" value="Are you sure that your name (or partner''s name) is ''Ada Lovelace''?"/>
-    </module>
-
-    <!-- Forgot to change NetID or Partner NetID? -->
-    <module name="RegexpSingleline">
-        <property name="id" value="Header"/>
-        <property name="fileExtensions" value ="txt, java, toy"/>
-        <property name="format" value="NetID:\s+alovelace\s*$"/>
-        <property name="ignoreCase" value="true"/>
-        <property name="minimum" value="0"/>
-        <property name="maximum" value="0"/>
-        <property name="message" value="Are you sure that your NetID (or partner''s NetID) is ''alovelace''?"/>
-    </module>
-
-    <!-- Forgot to change Description? -->
-    <module name="RegexpSingleline">
-        <property name="severity" value="error"/>
-        <property name="id" value="Header"/>
-        <property name="fileExtensions" value ="txt, java, toy"/>
-        <property name="format" value="Description:\s+Prints\s+'Hello, World'"/>
-        <property name="ignoreCase" value="true"/>
-        <property name="minimum" value="0"/>
-        <property name="maximum" value="0"/>
-        <property name="message" value="Are you sure that the Description is for this program?"/>
-    </module>
-
-    <module name="RegexpSingleline">
-        <property name="id" value="Header"/>
-        <property name="fileExtensions" value ="txt, java, toy"/>
-        <property name="format" value="NetID:\s+[a-zA-Z0-9]{2,8}@princeton.edu\b"/>
-        <property name="ignoreCase" value="true"/>
-        <property name="minimum" value="0"/>
-        <property name="maximum" value="0"/>
-        <property name="message" value="The NetID must not include the ''@princeton.edu'' suffix."/>
-    </module>
-
-    <module name="RegexpSingleline">
-        <property name="id" value="Header"/>
-        <property name="severity" value="error"/>
-        <property name="fileExtensions" value ="txt, java, toy"/>
-        <property name="format" value="Precept:\s+((P[0-9][0-9][A-Z]?)|(B0[12]))\b"/>
-        <property name="ignoreCase" value="false"/>
-        <property name="minimum" value="1"/>
-        <property name="maximum" value="999"/>
-        <property name="message" value="Invalid, empty, or missing ''Precept'' in header."/>
-    </module>
-
-    <module name="RegexpSingleline">
-        <property name="id" value="Header"/>
-        <property name="fileExtensions" value ="txt, java, toy"/>
-        <property name="format" value="Precept:\s+(p[0-9][0-9][A-Z]?)\b"/>
-        <property name="ignoreCase" value="false"/>
-        <property name="minimum" value="0"/>
-        <property name="maximum" value="0"/>
-        <property name="message" value="The precept number in the header contains the letter ''p'' instead of ''P''."/>
-    </module>
-
-    <module name="RegexpSingleline">
-        <property name="id" value="Header"/>
-        <property name="fileExtensions" value ="txt, java, toy"/>
-        <property name="format" value="Precept:\s+(B[Oo][12]|P[Oo][Oo0-9][A-Z]?|P[0-9][Oo][A-Z]?)\b"/>
-        <property name="ignoreCase" value="true"/>
-        <property name="minimum" value="0"/>
-        <property name="maximum" value="0"/>
-        <property name="message" value="The precept number in the header contains the letter ''O'' instead of the digit ''0''."/>
-    </module>
-
-    <!-- Checks for Description, but not in readme.txt  -->
-    <module name="RegexpSingleline">
-        <property name="id" value="Header"/>
-        <property name="fileExtensions" value ="java, toy"/>
-        <property name="format" value="Description:\s+\S"/>
-        <property name="ignoreCase" value="true"/>
-        <property name="minimum" value="1"/>
-        <property name="maximum" value="999"/>
-        <property name="message" value="Invalid, empty, or missing ''Description'' in header."/>
-    </module>
-
-    <!-- This is for readme.txt and .toy files only. LineLength checks only Java files (but also reports number of characters). -->
-    <!-- 87 is the limit on codePost before the text because invisible until you scroll -->
-    <module name="RegexpSingleline">
-        <property name="id" value="LineLength"/>
-        <property name="fileExtensions" value ="txt, toy"/>
-        <property name="format" value="..{87}"/>
-        <property name="message" value="Line exceeds 87 characters."/>
-    </module>
-
-    <!-- Checks for more than 87 characters because it ends in whitespace. -->
-    <module name="RegexpSingleline">
-        <property name="id" value="LineLength"/>
-        <property name="fileExtensions" value="txt, java, toy"/>
-        <property name="format" value="^.{87}\s+$"/>
-        <property name="message" value="Line exceeds 87 characters because it ends in whitespace."/>
-    </module>
-
-    <!-- =========================================================================== -->
-    <!-- END: PRINCETON COS 226 SPECIFIC CHECKS (mostly for header)                  -->
-    <!-- =========================================================================== -->
-
 
     <!-- =========================================================================== -->
     <!-- =========================================================================== -->
@@ -368,22 +119,6 @@
 
         <!-- =========================================================================== -->
         <!-- BEGIN: CUSTOM CHECKERS (by wayne)                                           -->
-        <!-- =========================================================================== -->
-
-        <!-- =========================================================================== -->
-        <!-- BEGIN: PRINCETON COS 226 SPECIFIC CHECKS                                    -->
-        <!-- =========================================================================== -->
-
-        <!-- Checks for calls to Math.random(). -->
-        <module name="IllegalMethodCall">
-            <property name="id" value="AvoidMathRandom"/>
-            <property name="severity" value="error"/>
-            <property name="format" value="Math\.random"/>
-            <message key = "illegal.method.call" value="Do not call ''{0}'' in this course. Instead, use an appropriate method from ''StdRandom'', such as ''StdRandom.uniform()''."/>
-        </module>
-
-        <!-- =========================================================================== -->
-        <!-- END: PRINCETON COS 226 SPECIFIC CHECKS                                      -->
         <!-- =========================================================================== -->
 
         <!-- don't call Runtime.getRuntime(), etc. -->
@@ -440,7 +175,7 @@
 
         <!-- =========================================================================== -->
         <!-- Check for annotations                                                       -->
-        <!-- https://checkstyle.sourceforge.io/config_annotation.html                    -->
+        <!-- http://checkstyle.sourceforge.net/config_annotation.html                    -->
         <!-- =========================================================================== -->
 
 <!--
@@ -454,7 +189,7 @@
 
         <!-- =========================================================================== -->
         <!-- Block checks                                                                -->
-        <!-- https://checkstyle.sourceforge.io/config_blocks.html                        -->
+        <!-- http://checkstyle.sourceforge.net/config_blocks.html                        -->
         <!-- =========================================================================== -->
 
         <module name="EmptyCatchBlock"/>
@@ -479,7 +214,7 @@
 
         <!-- =========================================================================== -->
         <!-- Class design                                                                -->
-        <!-- https://checkstyle.sourceforge.io/config_design.html                        -->
+        <!-- http://checkstyle.sourceforge.net/config_design.html                        -->
         <!-- =========================================================================== -->
 
         <!-- Flags instance variables in private nested classes (even though they are effectively private) -->
@@ -507,7 +242,7 @@
 
         <!-- =========================================================================== -->
         <!-- Coding violations                                                           -->
-        <!-- https://checkstyle.sourceforge.io/config_coding.html                        -->
+        <!-- http://checkstyle.sourceforge.net/config_coding.html                        -->
         <!-- =========================================================================== -->
         <module name="CovariantEquals">
             <message key="covariant.equals" value="The type of the parameter variable for the ''equals()'' method must be ''Object''."/>
@@ -541,20 +276,14 @@
         </module>
 
         <module name="NestedForDepth">
-            <property name="max" value="2"/>
-            <message key="nested.for.depth" value="Using a quadruple nested loop suggests poor design in this program."/>
+            <property name="max" value="4"/>
         </module>
-
         <module name="NestedIfDepth">
-            <property name="max" value="2"/>
-            <message key="nested.if.depth" value="Using a quadruple nested if statement suggests poor design in this program."/>
+            <property name="max" value="3"/>
         </module>
-
         <module name="NestedTryDepth">
-            <property name="max" value="0"/>
-            <message key="nested.try.depth" value="Using a nested try statement suggests poor design in this program."/>
+            <property name="max" value="1"/>
         </module>
-
         <module name="NoClone"/>
         <module name="NoFinalizer"/>
         <module name="SuperClone"/>
@@ -623,7 +352,7 @@
         </module>
 
         <!-- do not allow classes from these subpackages of java.util -->
-        <module name="MyIllegalType">
+        <module name="IllegalType">
             <property name="severity" value="error"/>
             <property name="illegalClassNames" value=""/>
             <property name="format" value="^java\.util\.(concurrent|jar|spi|zip)"/>
@@ -632,7 +361,7 @@
         <module name="IllegalImport">
             <property name="severity" value="error"/>
             <property name="regexp" value="true"/>
-            <property name="illegalPkgs" value="^java\.util\.(concurrent|jar|spi|zip)"/>
+            <property name="illegalClasses" value="^java\.util\.(concurrent|jar|spi|zip)"/>
             <message key="import.illegal" value="Do not import ''{0}'' in this course."/>
         </module>
         <module name="IllegalInstantiation">
@@ -678,6 +407,13 @@
                                                 java.time"/>
             <property name="regexp" value="false"/>
             <message key="import.illegal" value="Do not import ''{0}'' in this course."/>
+        </module>
+
+        <!-- using edu.princeton.cs.stdlib instead of edu.princeton.cs.algs4 -->
+        <module name="IllegalImport">
+            <property name="severity" value="error"/>
+            <property name="illegalPkgs" value="edu.princeton.cs.introcs"/>
+            <message key="import.illegal" value="Do not import ''{0}'' in this course. Instead, use the I/O libraries in edu.princeton.cs.algs4."/>
         </module>
 
         <!-- do not allow these types in java.io -->
@@ -774,23 +510,7 @@
             <message key="instantiation.avoid" value="Do not use ''java.util.Hashtable''. Instead, use ''java.util.HashMap''."/>
         </module>
 
-        <!-- don't use java.util.Stack - it inherits from java.util.Vector and iterator goes in wrong order -->
-        <module name="IllegalType">
-            <property name="illegalClassNames" value="java.util.Stack"/>
-            <message key="illegal.type" value="Do not use ''java.util.Stack''. Instead, use ''edu.princeton.cs.algs4.Stack''."/>
-        </module>
-        <module name="IllegalImport">
-            <property name="illegalClasses" value="java.util.Stack"/>
-            <property name="regexp" value="false"/>
-            <message key="import.illegal" value="Do not use ''java.util.Stack''. Instead, use ''edu.princeton.cs.algs4.Stack''."/>
-        </module>
-        <module name="IllegalInstantiation">
-            <property name="classes" value="java.util.Stack"/>
-            <message key="instantiation.avoid" value="Do not use ''java.util.Stack''. Instead, use ''edu.princeton.cs.algs4.Stack''."/>
-        </module>
-
         <!-- do not use java.util.Vector -->
-        <!-- TODO: check whether this disallows Vector from introcs.jar -->
         <module name="IllegalType">
             <property name="illegalClassNames" value="java.util.Vector"/>
             <message key="illegal.type" value="Do not use ''java.util.Vector''. Instead, use ''java.util.ArrayList'' or ''java.util.LinkedList''."/>
@@ -825,41 +545,19 @@
         </module>
 
         <!-- Don't allow variables to be declared of wrapper types   -->
-        <!-- (special case for int, boolean, and double for more descriptive error message)   -->
-        <!-- Use MyIllegalType because IllegalType flags wrapper type when used with generics -->
-        <!-- bug: doesn't seem to work if id value = "WrapperType" ??? -->
-
-        <module name="MyIllegalType">
+        <!-- bug? doesn't seem to work if value = "WrapperType"      -->
+        <!-- bug? need to include both java.lang.Boolean and Boolean -->
+        <module name="IllegalType">
             <property name="id" value="Wrapper"/>
-            <property name="illegalClassNames" value="java.lang.Boolean"/>
-            <message key="illegal.type" value="Use the primitive type ''boolean'' instead of the wrapper type ''{0}''."/>
-        </module>
-
-        <module name="MyIllegalType">
-            <property name="id" value="Wrapper"/>
-            <property name="illegalClassNames" value="java.lang.Double"/>
-            <message key="illegal.type" value="Use the primitive type ''double'' instead of the wrapper type ''{0}''."/>
-        </module>
-
-        <module name="MyIllegalType">
-            <property name="id" value="Wrapper"/>
-            <property name="illegalClassNames" value="java.lang.Integer"/>
-            <message key="illegal.type" value="Use the primitive type ''int'' instead of the wrapper type ''{0}''."/>
-        </module>
-
-        <module name="MyIllegalType">
-            <property name="id" value="Wrapper"/>
-            <property name="illegalClassNames" value="java.lang.Character"/>
-            <message key="illegal.type" value="Use the primitive type ''char'' instead of the wrapper type ''{0}''."/>
-        </module>
-
-        <module name="MyIllegalType">
-            <property name="id" value="Wrapper"/>
-            <property name="illegalClassNames" value="java.lang.Long,
-                                                      java.lang.Short,
-                                                      java.lang.Float,
-                                                      java.lang.Byte"/>
-            <message key="illegal.type" value="Use the primitive type instead of the corresponding wrapper type ''{0}''. For example, use ''long'' instead of ''Long''."/>
+            <property name="illegalClassNames" value="java.lang.Boolean,   Boolean,
+                                                      java.lang.Integer,   Integer,
+                                                      java.lang.Double,    Double,
+                                                      java.lang.Long,      Long,
+                                                      java.lang.Short,     Short,
+                                                      java.lang.Float,     Float,
+                                                      java.lang.Byte,      Byte,
+                                                      java.lang.Character, Character"/>
+            <message key="illegal.type" value="Use the primitive type instead of the corresponding wrapper type ''{0}''. For example, use ''boolean'' instead of ''Boolean''."/>
         </module>
 
         <!-- Don't allow objects to be constructed of wrapper types -->
@@ -873,7 +571,7 @@
                                             java.lang.Float,
                                             java.lang.Byte,
                                             java.lang.Character"/>
-            <message key="instantiation.avoid" value="You should not need to call the ''{0}'' constructor."/>
+            <message key="instantiation.avoid" value="Use the primitive type instead of the corresponding wrapper type ''{0}''. For example, use ''boolean'' instead of ''Boolean''."/>
         </module>
 
         <module name="DeclarationOrder">
@@ -1006,7 +704,7 @@
 
         <!-- =========================================================================== -->
         <!-- Headers                                                                     -->
-        <!-- https://checkstyle.sourceforge.io/config_header.html                        -->
+        <!-- http://checkstyle.sourceforge.net/config_header.html                        -->
         <!-- =========================================================================== -->
 
 <!--
@@ -1015,7 +713,7 @@
 
         <!-- =========================================================================== -->
         <!-- Imports                                                                     -->
-        <!-- https://checkstyle.sourceforge.io/config_imports.html                       -->
+        <!-- http://checkstyle.sourceforge.net/config_imports.html                       -->
         <!-- =========================================================================== -->
 
         <module name="AvoidStaticImport">
@@ -1047,7 +745,7 @@
 
         <!-- =========================================================================== -->
         <!-- Javadoc comments                                                            -->
-        <!-- https://checkstyle.sourceforge.io/config_javadoc.html                       -->
+        <!-- http://checkstyle.sourceforge.net/config_javadoc.html                       -->
         <!-- =========================================================================== -->
 
 <!--    Running time increases substantially with Javadoc checks -->
@@ -1067,7 +765,7 @@
 
         <!-- =========================================================================== -->
         <!-- Metrics                                                                     -->
-        <!-- https://checkstyle.sourceforge.io/config_metrics.html                       -->
+        <!-- http://checkstyle.sourceforge.net/config_metrics.html                       -->
         <!-- =========================================================================== -->
 
 <!--
@@ -1081,7 +779,7 @@
 
         <!-- =========================================================================== -->
         <!-- Miscellaneous checks                                                        -->
-        <!-- https://checkstyle.sourceforge.io/config_misc.html                          -->
+        <!-- http://checkstyle.sourceforge.net/config_misc.html                          -->
         <!-- =========================================================================== -->
         <module name="TodoComment"/>
 
@@ -1127,7 +825,7 @@
 
         <!-- =========================================================================== -->
         <!-- Modifiers                                                                   -->
-        <!-- https://checkstyle.sourceforge.io/config_modifier.html                      -->
+        <!-- http://checkstyle.sourceforge.net/config_modifier.html                      -->
         <!-- =========================================================================== -->
 
         <module name="ModifierOrder">
@@ -1142,7 +840,7 @@
 
         <!-- =========================================================================== -->
         <!-- Naming conventions                                                          -->
-        <!-- https://checkstyle.sourceforge.io/config_naming.html                        -->
+        <!-- http://checkstyle.sourceforge.net/config_naming.html                        -->
         <!-- =========================================================================== -->
 
         <!-- MODIFIED TO ALLOW FINAL VARIABLES TO BE ALL UPPERCASE     -->
@@ -1260,22 +958,8 @@
 
         <!-- =========================================================================== -->
         <!-- Regexp                                                                      -->
-        <!-- https://checkstyle.sourceforge.io/config_regexp.html                        -->
+        <!-- http://checkstyle.sourceforge.net/config_regexp.html                        -->
         <!-- =========================================================================== -->
-
-        <!-- Checks for useless calls to StdRandom.uniform(1) or StdRandom.uniform(0, 1) -->
-        <module name="RegexpSinglelineJava">
-            <property name="id" value="AlwaysReturnsZero"/>
-            <property name="format" value="\bStdRandom\s*\.*\s*uniform\s*\(\s*1\s*\)"/>
-            <property name="ignoreComments" value="true"/>
-            <property name="message" value="The method call ''StdRandom.uniform(1)'' always returns ''0''. Did you mean ''StdRandom.uniform(0.0, 1.0)''?"/>
-        </module>
-        <module name="RegexpSinglelineJava">
-            <property name="id" value="AlwaysReturnsZero"/>
-            <property name="format" value="\bStdRandom\s*\.*\s*uniform\s*\(\s*0\s*,\s*1\s*\)"/>
-            <property name="ignoreComments" value="true"/>
-            <property name="message" value="The method call ''StdRandom.uniform(0, 1)'' always returns ''0''. Did you mean ''StdRandom.uniform(0.0, 1.0)''?"/>
-        </module>
 
         <!-- Checks for calls to StdDraw.show(int). -->
         <module name="RegexpSinglelineJava">
@@ -1285,15 +969,14 @@
             <property name="message" value="The method ''StdDraw.show(int)'' is deprecated. Use ''StdDraw.enableDoubleBuffering()'', ''StdDraw.show()'', and ''StdDraw.pause(int)'' instead."/>
         </module>
 
-        <!-- Checks for Math.pow(x, 3) instead of x*x*x -->
+        <!-- check for Math.pow(*, 3) and Math.pow(*, 0.5) -->
         <module name="RegexpSinglelineJava">
             <property name="id" value="Performance"/>
             <property name="format" value="\bMath\.pow\([^,]*, *3(\.0?)?\)"/>
             <property name="ignoreComments" value="true"/>
-            <property name="message" value="''Math.pow(x, 3)'' is slow. Use ''x * x * x'' instead."/>
+            <property name="message" value="''Math.pow(x, 3)'' is slow. Use ''x*x*x'' instead."/>
         </module>
 
-        <!-- Checks for Math.pow(x, 0.5) instead of Math.sqrt(x) -->
         <module name="RegexpSinglelineJava">
             <property name="id" value="Sqrt"/>
             <property name="format" value="\bMath\.pow\([^,]*, *0?\.5\)"/>
@@ -1321,7 +1004,7 @@
 
         <!-- =========================================================================== -->
         <!-- Size violations                                                             -->
-        <!-- https://checkstyle.sourceforge.io/config_sizes.html                         -->
+        <!-- http://checkstyle.sourceforge.net/config_sizes.html                         -->
         <!-- =========================================================================== -->
 
         <module name="AnonInnerLength"/>
@@ -1339,7 +1022,7 @@
 
         <!-- =========================================================================== -->
         <!-- Whitespace                                                                  -->
-        <!-- https://checkstyle.sourceforge.io/config_whitespace.html                    -->
+        <!-- http://checkstyle.sourceforge.net/config_whitespace.html                    -->
         <!-- =========================================================================== -->
         <module name="GenericWhitespace"/>
         <module name="EmptyForInitializerPad"/>
@@ -1537,129 +1220,6 @@
             <message key="illegal.throw" value="Do not throw ''{0}'' in this method."/>
         </module>
         -->
-
-        <!-- =========================================================================== -->
-        <!-- BEGIN: PRINCETON COS 226 SPECIFIC CHECKS                                    -->
-        <!-- =========================================================================== -->
-
-        <!-- using edu.princeton.cs.introcs instead of edu.princeton.cs.algs4 -->
-        <module name="IllegalImport">
-            <property name="severity" value="error"/>
-            <property name="illegalPkgs" value="edu.princeton.cs.introcs"/>
-            <message key="import.illegal" value="Do not import ''{0}'' in this course. Instead, use the I/O libraries in edu.princeton.cs.algs4."/>
-        </module>
-
-        <!-- =========================================================================== -->
-        <!-- BEGIN: CUSTOM CHECKS (by wayne)                                             -->
-        <!-- =========================================================================== -->
-
-        <!-- Flags words in profanity blacklist. -->
-        <module name="Profanity">
-        </module>
-
-        <!-- Checks that main() calls every public constructor, instance method, and static method. -->
-        <module name="MainCallsAllPublicMethods">
-            <property name="ignoredMethodNames" value="toString,filledTriangle"/>
-        </module>
-
-        <!-- Checks that every method and instance variable has a comment. -->
-        <module name="Comment">
-            <property name="ignoredMethodNames" value="main,next,hasNext,remove,compare"/>
-            <property name="ignoreStaticFinalVariables" value="true"/>
-        </module>
-
-        <!-- At most 1 occurrence of each string literal                       -->
-        <!-- Exception methods:  main() and toString()                         -->
-        <!-- Exception contexts: throw clause                                  -->
-        <!-- Exception strings:  empty string, only whitespace/punctuation,    -->
-        <!--                     string like "%6.2f", and probably a bit more  -->
-        <module name="StringLiteralCount">
-            <property name="allowedDuplicates" value="1"/>
-            <property name="ignoreStringsRegexp" value='^"([^a-zA-Z][deEfFs]?)*(\\n)?"$'/>
-            <property name="ignoreMainMethod" value="true"/>
-            <property name="ignoreToStringMethod" value="true"/>
-            <property name="ignoreOccurrenceContext" value="LITERAL_THROW"/>
-        </module>
-
-        <!-- =========================================================================== -->
-        <!-- END: CUSTOM CHECKS (by wayne)                                               -->
-        <!-- =========================================================================== -->
-
-        <!-- Check that length of line is at most 87 characters. -->
-        <module name="LineLength">
-            <property name="max" value="87"/>
-            <message key="maxLineLen" value="Line length is {1,number,integer} characters (max allowed is {0,number,integer})."/>
-        </module>
-
-        <module name="MethodLength">
-            <property name="max" value="150"/>
-            <property name="countEmpty" value="true"/>
-            <message key="maxLine.method" value="Method length is {0,number,integer} lines (max allowed is {1,number,integer})."/>
-        </module>
-
-        <module name="AvoidInlineConditionals">
-            <message key="inline.conditional.avoid" value="Do not use the ternary conditional operator in this course."/>
-        </module>
-
-        <module name="IllegalToken">
-            <property name="id" value="BitwiseOr"/>
-            <property name="tokens" value="BOR, BOR_ASSIGN"/>
-            <message key="illegal.token" value="Did you mean to use the conditional OR operator (''||'') instead of the bitwise OR operator (''|'') ?"/>
-        </module>
-
-        <module name="IllegalToken">
-            <property name="id" value="BitwiseAnd"/>
-            <property name="tokens" value="BAND, BAND_ASSIGN"/>
-            <message key="illegal.token" value="Did you mean to use the conditional AND operator (''&amp;&amp;'') instead of the bitwise AND operator (''&amp;'') ?"/>
-        </module>
-
-        <module name="IllegalToken">
-            <property name="id" value="LambdaExpression"/>
-            <property name="tokens" value="LAMBDA"/>
-            <message key="illegal.token" value="Do not use lambda expressions in this course."/>
-        </module>
-
-        <module name="IllegalToken">
-            <property name="id" value="MethodReference"/>
-            <property name="tokens" value="DOUBLE_COLON"/>
-            <message key="illegal.token" value="Do not use method references in this course."/>
-        </module>
-
-        <module name="IllegalToken">
-            <property name="id" value="EnumType"/>
-            <property name="tokens" value="ENUM_DEF"/>
-            <message key="illegal.token" value="Do not define enums in this course."/>
-        </module>
-
-        <module name="IllegalToken">
-            <property name="id" value="VariableLengthArgument"/>
-            <property name="tokens" value="ELLIPSIS"/>
-            <message key="illegal.token" value="Do not use variable-length arguments in this course."/>
-        </module>
-
-<!--
-        <module name="IllegalToken">
-            <property name="id" value="LabeledBreakStatement"/>
-            <property name="tokens" value="LABELED_STAT"/>
-            <message key="illegal.token" value="Do not use labeled break or continue statements in this course."/>
-        </module>
--->
-
-        <module name="IllegalToken">
-            <property name="id" value="InterfaceType"/>
-            <property name="tokens" value="INTERFACE_DEF"/>
-            <message key="illegal.token" value="Do not define interfaces in this course."/>
-        </module>
-
-        <!-- use StdIn or In instead of java.util.Scanner -->
-        <module name="IllegalType">
-            <property name="illegalClassNames" value="java.util.Scanner"/>
-            <message key="illegal.type" value="Do not use ''java.util.Scanner'' in this course. Instead, use ''StdIn'' or ''In''."/>
-        </module>
-
-        <!-- =========================================================================== -->
-        <!-- END: PRINCETON COS 226 SPECIFIC CHECKS                                      -->
-        <!-- =========================================================================== -->
 
     </module>
 

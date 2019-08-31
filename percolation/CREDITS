@@ -1,5 +1,5 @@
 heart25.txt
-greeting57.txt    Maia Ginsburg
+greeting57.txt
 jerry47.txt       Alex Ander (based on Japanese nonogram)
 sedgewick60.txt   Alex Ander
 michael61.txt     Alex Ander
@@ -7,4 +7,4 @@ wayne98.txt       Alex Ander
 java60.txt        Ilyas Bambrik
 
 To convert from 0-based indexing to 1-based indexing:
-awk '{ if (NR > 1) { $1++; $2++; } printf "%2d %2d\n", $1, $2 }' snake13.txt
+awk '{ if (NR > 1) { $1++; $2++; printf "%2d %2d\n", $1, $2 } else printf "%d\n", $1 }' snake13.txt
