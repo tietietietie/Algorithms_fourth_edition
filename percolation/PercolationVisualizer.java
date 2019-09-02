@@ -6,7 +6,7 @@
  *  This program takes the name of a file as a command-line argument.
  *  From that file, it
  *
- *    - Reads the grid size n of the percolation system.
+ *    - Reads the grid size n of the percolation systjavac PercolationVisualizer.javaem.
  *    - Creates an n-by-n grid of sites (intially all blocked)
  *    - Reads in a sequence of sites (row i, column j) to open.
  *
