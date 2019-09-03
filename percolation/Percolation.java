@@ -15,9 +15,10 @@ public class Percolation {
             throw new java.lang.IllegalArgumentException("n must be more than zero");
         site = new int[n * n + 2];
         sz = new int[n * n + 2];
-        site[0] = 1;
+        sz[0] = N * N + 3;
+        site[0] = 0;
         for (int i = 1; i < n * n + 1; i++) {
-            site[i] = 0;
+            site[i] = -1;
         }
         site[n * n + 1] = n * n + 1;
         N = n;
@@ -49,11 +50,11 @@ public class Percolation {
             throw new java.lang.IllegalArgumentException(
                     "the values of row and col must between 1 and N");
         int pos = (row - 1) * N + col;
-        if (pos < N + 1) site[pos] = 1;
-        else if (pos < (N - 1) * N + 1) site[pos] = pos;
-        else site[pos] = site[N * N + 1];
-        sz[pos] = 1;
         numberofopensites += 1;
+        sz[pos] = 1;
+        if (pos < N + 1) union(pos, 0);
+        else if (pos < (N - 1) * N + 1) site[pos] = pos;
+        else union(pos, N * N + 1);
         int upper, down, left, right;
         if (row > 1 && isOpen(row - 1, col)) {
             upper = (row - 2) * N + col;
@@ -76,7 +77,7 @@ public class Percolation {
 
     public boolean isOpen(int row, int col) {
         int pos = (row - 1) * N + col;
-        if (site[pos] != 0)
+        if (site[pos] != -1)
             return true;
         else
             return false;
@@ -86,7 +87,7 @@ public class Percolation {
         int pos = (row - 1) * N + col;
         if (!isOpen(row, col))
             return false;
-        else if (root(pos) == 1)
+        else if (root(pos) == root(0))
             return true;
         else
             return false;
@@ -97,7 +98,7 @@ public class Percolation {
     }
 
     public boolean percolates() {
-        if (site[0] == site[N * N + 1])
+        if (root(0) == root(N * N + 1))
             return true;
         else
             return false;
@@ -107,3 +108,5 @@ public class Percolation {
 
     }
 }
+
+//have some bugs: when the system is percolated, any opened site at the last row will be filled.
