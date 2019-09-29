@@ -27,10 +27,8 @@ public class UF_quickfind
         for(int i = 0; i < id.length; i++)
             if(id[i] == pid) id[i] = qid;
     }
-}
-
-public static void main(String[] args)
-{
+    public static void main(String[] args)
+    {
     int N = StdIn.readInt();
     UF_quickfind uf = new UF_quickfind(N);
     while(!Std.isEmpty())
@@ -43,4 +41,6 @@ public static void main(String[] args)
             StdOut.println(p + " " + q);
         }
     }
+    }
 }
+
