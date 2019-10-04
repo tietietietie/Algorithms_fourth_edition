@@ -1,6 +1,6 @@
 public class LinkedStackOfStrings
 {
-    private Node first =null;
+    private Node first = null;
 
     private class Node
     {
@@ -16,7 +16,7 @@ public class LinkedStackOfStrings
     public void push(string item)
     {
         Node oldfirst = first;
-        first = new Node();
+        first = new Node();  //改变first所指向的Node
         first.item = item;
         first.next = oldfirst;
     }
