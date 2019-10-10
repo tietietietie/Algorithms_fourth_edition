@@ -21,7 +21,7 @@ while(!queue.isEmpty())
         if(!marked.contains(w))
         {
             marked.add(w);
-            queue.enqueue(w);appli
+            queue.enqueue(w);
         }
     }
 }
