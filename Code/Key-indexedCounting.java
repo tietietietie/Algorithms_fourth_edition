@@ -14,7 +14,7 @@ public class KeyIndexedCounting
         for(int i = 0; i < N; i++)
             count[a[i]+1]++;
         
-        for (int r = 0; r < R+1; r++)
+        for (int r = 0; r < R; r++) //迭代了R次，对count[R]进行了操作
             count[r+1] += count[r];
         
         for(int i = 0; i < N; i++)
